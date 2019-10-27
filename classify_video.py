@@ -1,5 +1,8 @@
-from keras.preprocessing.image import img_to_array
-from keras.models import load_model
+from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.models import load_model
+
+import tensorflow.keras.backend as K
+
 import imutils
 import pickle
 import numpy as np
@@ -31,7 +34,7 @@ while(True):
     output = image.copy()
 
     # pre-process the image for classification
-    image = cv2.resize(image, (72, 96))
+    image = cv2.resize(image, (224, 168))
     image = image.astype("float") / 255.0
     image = img_to_array(image)
     image = np.expand_dims(image, axis=0)
@@ -42,6 +45,7 @@ while(True):
     label = lb.classes_[idx]
 
     label = "{}: {:.2f}%".format(label, proba[idx] * 100)
+    K.clear_session()
     output = imutils.resize(output, width=400)
 
     cv2.putText(output, label, (10, 25),  cv2.FONT_HERSHEY_SIMPLEX,
